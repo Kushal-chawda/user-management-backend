@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeUserMail;
 
 class AuthController extends Controller
 {
@@ -30,6 +32,8 @@ class AuthController extends Controller
         $token = $user
             ->createToken('auth_token')
             ->plainTextToken;
+
+        Mail::to($user->email)->send(new WelcomeUserMail($user));
 
         return response()->json([
 
